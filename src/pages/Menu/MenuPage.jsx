@@ -1,67 +1,72 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Header from '../../components/common/layout/Header'
+import CustomButton from '../../components/common/button/CustomButton';
 
 const MenuItem = [
   {
     id: 1,
     name: "Margherita",
-    unitPrice: 799,
+    unitPrice: 79,
     ingredients: ["Tomato Sauce", "Mozzarella", "Basil"],
     soldOut: false,
-    imageUrl: "src/assets/photos/pizza-1.jpg",
+    imageUrl: "public/photos/pizza-1.jpg",
   },
   {
     id: 2,
     name: "Pepperoni",
-    unitPrice: 999,
+    unitPrice: 99,
     ingredients: ["Tomato Sauce", "Mozzarella", "Pepperoni"],
-    soldOut: false,
-    imageUrl: "src/assets/photos/pizza-2.jpg ",
+    soldOut: true,
+    imageUrl: "public/photos/pizza-2.jpg ",
   },
   {
     id: 3,
     name: "BBQ Chicken",
-    unitPrice: 1099,
+    unitPrice: 10,
     ingredients: ["BBQ Sauce", "Chicken", "Onions", "Mozzarella"],
     soldOut: false,
-    imageUrl: "src/assets/photos/pizza-3.jpg",
+    imageUrl: "public/photos/pizza-3.jpg",
   },
   {
     id: 4,
     name: "Veggie Supreme",
-    unitPrice: 899,
+    unitPrice: 84,
     ingredients: ["Tomato Sauce", "Mozzarella", "Peppers", "Olives", "Onions"],
     soldOut: false,
-    imageUrl: "src/assets/photos/pizza-4.jpg",
+    imageUrl: "public/photos/pizza-4.jpg",
   },
   {
     id: 5,
     name: "Four Cheese",
-    unitPrice: 999,
+    unitPrice: 67,
     ingredients: ["Mozzarella", "Cheddar", "Parmesan", "Blue Cheese"],
     soldOut: false,
-    imageUrl: "src/assets/photos/pizza-5.jpg",
+    imageUrl: "public/photos/pizza-5.jpg",
   },
   {
     id: 6,
     name: "Hawaiian",
-    unitPrice: 949,
+    unitPrice: 98,
     ingredients: ["Tomato Sauce", "Mozzarella", "Ham", "Pineapple"],
     soldOut: true,
-    imageUrl: "src/assets/photos/pizza-6.jpg",
+    imageUrl: "public/photos/pizza-6.jpg",
   },
 ];
 
 export default function MenuPage() {
+  const [count ,setCounter] = useState(0);
   return (
     <div>
       <Header />
       
+      <div className='bg-stone-100 text-stone-700 overflow-scroll'>
 
-      <ul>
+        <main className='mx-auto max-w-3xl'>
+
+    <ul className=''>
         {MenuItem.map((pizza) => {
           return (
-            <li className='flex gap-4 py-2' key={pizza.id}>
+            <li className='flex gap-4 py-2 border-b border-gray-300 ' key={pizza.id}>
               <img
                 className={`h-24 ${pizza.soldOut ? 'opacity-70 grayscale' : ''}`}
                 src={pizza.imageUrl}
@@ -80,12 +85,17 @@ export default function MenuPage() {
                       Sold out
                     </p>
                   )}
+                  <CustomButton>
+                    Add To Cart
+                  </CustomButton>
                 </div>
               </div>
             </li>
           );
         })}
       </ul>
+      </main>
+      </div>
     </div>
   );
 }

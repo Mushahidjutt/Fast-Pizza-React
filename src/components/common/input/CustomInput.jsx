@@ -21,8 +21,13 @@
   let baseClass = "px-3 py-[7px] border rounded focus:outline-none w-full bg-light_gray no-spinners";
   
   if (variant === 'search') {
-    console.log("Reached")
+    
     baseClass += " w-28 rounded-full bg-yellow-100 px-4 py-2 text-sm transition-all duration-300 placeholder:text-stone-400 focus:outline-none focus:ring focus:ring-yellow-500 focus:ring-opacity-50 sm:w-64 sm:focus:w-72"; // example class for search variant
+  }
+
+  if (variant === 'search-name') {
+    
+    baseClass += " input mb-8 max-w-72 rounded-2xl focus:outline-none w-full bg-light_gray no-spinners"; // example class for search-name variant
   }
 
   return (
