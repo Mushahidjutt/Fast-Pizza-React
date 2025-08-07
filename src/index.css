@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+body {
+  font-family: var(--font-poppins);
+}
+
+@theme {
+  /* 🎨 Colors */
+  --color-primary: #2ecc71;
+
+  /* 🖋 Fonts */
+  --font-poppins: "Poppins", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
+
+  /* 📱 Breakpoints */
+  --breakpoint-xs: 320px;
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1536px;
+}
+
+/* @base {
+  body {
+    font-family: var(--font-poppins);
+  }
+} */
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f3f4f6; /* Tailwind gray-100 */
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(
+    to bottom,
+    #34d399,
+    #10b981
+  ); /* emerald-400 to emerald-600 */
+  border-radius: 9999px;
+  border: 2px solid #f3f4f6;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    to bottom,
+    #10b981,
+    #059669
+  ); /* darker on hover */
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+button {
+  cursor: pointer;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
