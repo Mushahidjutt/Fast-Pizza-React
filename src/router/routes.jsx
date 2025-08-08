@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import MenuPage from "../pages/Menu/MenuPage";
 import MainPage from "../pages/MainPage";
+import Cart from "../pages/Cart";
 
 
 
@@ -15,6 +16,12 @@ export const routes = createBrowserRouter([
   {
     path: "/mainpage",
     element: <MainPage/>,
+  },
+
+
+  {
+    path: "/cart",
+    element: <Cart/>,
   },
   
 
