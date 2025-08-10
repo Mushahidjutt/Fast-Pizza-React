@@ -154,13 +154,13 @@ export default function MenuPage() {
 
                             <button
                               className="ml-2 inline-block text-sm rounded-full bg-yellow-400 font-semibold uppercase tracking-wide text-stone-800 hover:bg-yellow-300 px-2.5 py-1 md:px-3.5 md:py-2"
-                              onClick={() => dispatch(deleteHandleClick(pizza))}
+                              onClick={() => (deleteHandleClick(pizza))}
                             >
                               Delete
                             </button>
                           </div>
                         ) : (
-                          <CustomButton onClick={() => dispatch(addHandleClick(pizza))}>
+                          <CustomButton onClick={() => (addHandleClick(pizza))}>
                             Add To Cart
                           </CustomButton>
                         )
@@ -171,7 +171,7 @@ export default function MenuPage() {
               );
             })}
           </ul>
-          <h1>Total Amount is : {total}</h1>
+          <h1></h1>
         </main>
       </div>
     </div>
