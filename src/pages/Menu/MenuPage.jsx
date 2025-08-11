@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/common/layout/Header";
 import CustomButton from "../../components/common/button/CustomButton";
-import { useDispatch, useSelector } from "react-redux";
-import { selectTotalAmount } from "../../Redux/cartSlice";
-useDispatch
+import { useNavigate } from "react-router-dom";
+
+import {
+  addToCart,
+  removeFromCart,
+  deleteFromCart,
+  selectCartItems,
+  selectVisibleIds,
+  selectTotalAmount,
+  selectTotalQuantity,
+} from "../../Redux/cartSlice";
 
 const MenuItem = [
   {
@@ -57,51 +66,22 @@ const MenuItem = [
 ];
 
 export default function MenuPage() {
-  const [cart, setCart] = useState([]);
-  const [visibleIds, setVisibleIds] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
+  const cart = useSelector(selectCartItems);
+  const visibleIds = useSelector(selectVisibleIds);
+  const TotalAmount = useSelector(selectTotalAmount);
+  const TotalQuantity = useSelector(selectTotalQuantity);
   
 
-
-  const addHandleClick = (product) => {
-    const existing = cart.find((item) => item.id === product.id);
-
-    if (existing) {
-      const updatedCart = cart.map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-      );
-      setCart(updatedCart);
-    } else {
-      setCart([...cart, { ...product, quantity: 1 }]);
-    }
-
-    // Show buttons for this item
-    if (!visibleIds.includes(product.id)) {
-      setVisibleIds((prev) => [...prev, product.id]);
-    }
-  };
-
-  const removeHandleClick = (product) => {
-    const updatedCart = cart
-      .map((item) =>
-        item.id === product.id ? { ...item, quantity: item.quantity - 1 } : item
-      )
-      .filter((item) => item.quantity > 0);
-    setCart(updatedCart);
-  };
-
-  const deleteHandleClick = (product) => {
-    const updatedCart = cart.filter((item) => item.id !== product.id);
-    setCart(updatedCart);
-
-    // Hide buttons for this item
-    setVisibleIds((prev) => prev.filter((id) => id !== product.id));
-  };
-
   return (
-    <div>
+    <div className="sticky top-0 z-50 bg-white shadow-md">
       <Header />
-      <div className="bg-stone-100 text-stone-700 overflow-scroll">
-        <main className="mx-auto max-w-3xl">
+
+      <div className="bg-stone-100 text-stone-700">
+        <main className="mx-auto max-w-3xl  max-h-[660px] overflow-y-auto">
           <ul>
             {MenuItem.map((pizza) => {
               const existingItem = cart.find((item) => item.id === pizza.id);
@@ -125,7 +105,6 @@ export default function MenuPage() {
                     </p>
 
                     <div className="mt-auto flex items-center justify-between">
-                      {/* Price or Sold Out */}
                       {pizza.soldOut ? (
                         <p className="text-sm font-medium uppercase text-stone-500">
                           Sold out
@@ -134,33 +113,33 @@ export default function MenuPage() {
                         <p className="text-sm">€ {pizza.unitPrice}</p>
                       )}
 
-                      {/* Buttons */}
                       {!pizza.soldOut ? (
                         existingItem && visibleIds.includes(pizza.id) ? (
                           <div>
                             <button
                               className="mr-2 inline-block text-sm rounded-full bg-yellow-400 font-semibold uppercase tracking-wide text-stone-800 hover:bg-yellow-300 px-2.5 py-1 md:px-3.5 md:py-2"
-                              onClick={() => removeHandleClick(pizza)}
+                              onClick={() => dispatch(removeFromCart(pizza.id))}
                             >
                               -
                             </button>
                             {existingItem.quantity}
                             <button
                               className="ml-2 inline-block text-sm rounded-full bg-yellow-400 font-semibold uppercase tracking-wide text-stone-800 hover:bg-yellow-300 px-2.5 py-1 md:px-3.5 md:py-2"
-                              onClick={() => addHandleClick(pizza)}
+                              onClick={() => dispatch(addToCart(pizza))}
                             >
                               +
                             </button>
-
                             <button
                               className="ml-2 inline-block text-sm rounded-full bg-yellow-400 font-semibold uppercase tracking-wide text-stone-800 hover:bg-yellow-300 px-2.5 py-1 md:px-3.5 md:py-2"
-                              onClick={() => (deleteHandleClick(pizza))}
+                              onClick={() => dispatch(deleteFromCart(pizza.id))}
                             >
                               Delete
                             </button>
                           </div>
                         ) : (
-                          <CustomButton onClick={() => (addHandleClick(pizza))}>
+                          <CustomButton
+                            onClick={() => dispatch(addToCart(pizza))}
+                          >
                             Add To Cart
                           </CustomButton>
                         )
@@ -171,9 +150,44 @@ export default function MenuPage() {
               );
             })}
           </ul>
-          <h1></h1>
+
+              
         </main>
+        
       </div>
+
+      {TotalQuantity > 0 ? (
+        <div className=" bg-stone-800 px-4 py-4 text-sm uppercase text-stone-200 sm:px-6 md:text-base">
+          {TotalQuantity > 0 ? (
+            <p className="space-x-6 font-semibold text-stone-300 sm:space-x-6">
+              {" "}
+              <div className="flex justify-between item center">
+                {" "}
+                <div className="flex gap-3">
+                  {" "}
+                  {TotalQuantity} Pizzas €{TotalAmount}{" "}
+                </div>{" "}
+                <div>
+                  {" "}
+                  {/* <a href="/cart">Open cart →</a>{" "} */}
+                  <button
+                    onClick={() => {
+                    
+                      navigate("/cart"); 
+                    }}
+                  >
+                    Open cart →
+                  </button>
+                </div>{" "}
+              </div>
+            </p>
+          ) : (
+            ""
+          )}
+        </div>
+      ) : (
+        ""
+      )}
     </div>
   );
 }
