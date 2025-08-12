@@ -4,6 +4,10 @@ body {
   font-family: var(--font-poppins);
 }
 
+body {
+  @apply bg-stone-100 text-stone-700;
+}
+
 @theme {
   /* 🎨 Colors */
   --color-primary: #2ecc71;

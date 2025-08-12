@@ -69,124 +69,101 @@ export default function MenuPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-
   const cart = useSelector(selectCartItems);
   const visibleIds = useSelector(selectVisibleIds);
   const TotalAmount = useSelector(selectTotalAmount);
   const TotalQuantity = useSelector(selectTotalQuantity);
-  
 
   return (
-    <div className="sticky top-0 z-50 bg-white shadow-md">
-      <Header />
-
-      <div className="bg-stone-100 text-stone-700">
-        <main className="mx-auto max-w-3xl  max-h-[660px] overflow-y-auto">
-          <ul>
-            {MenuItem.map((pizza) => {
-              const existingItem = cart.find((item) => item.id === pizza.id);
-
-              return (
-                <li
-                  key={pizza.id}
-                  className="flex gap-4 py-2 border-b border-gray-300"
-                >
-                  <img
-                    className={`h-24 ${
-                      pizza.soldOut ? "opacity-70 grayscale" : ""
-                    }`}
-                    src={pizza.imageUrl}
-                    alt={pizza.name}
-                  />
-                  <div className="flex grow flex-col pt-0.5">
-                    <p className="font-medium">{pizza.name}</p>
-                    <p className="text-sm capitalize italic text-stone-500">
-                      {pizza.ingredients.join(", ")}
-                    </p>
-
-                    <div className="mt-auto flex items-center justify-between">
-                      {pizza.soldOut ? (
-                        <p className="text-sm font-medium uppercase text-stone-500">
-                          Sold out
-                        </p>
-                      ) : (
-                        <p className="text-sm">€ {pizza.unitPrice}</p>
-                      )}
-
-                      {!pizza.soldOut ? (
-                        existingItem && visibleIds.includes(pizza.id) ? (
-                          <div>
-                            <button
-                              className="mr-2 inline-block text-sm rounded-full bg-yellow-400 font-semibold uppercase tracking-wide text-stone-800 hover:bg-yellow-300 px-2.5 py-1 md:px-3.5 md:py-2"
-                              onClick={() => dispatch(removeFromCart(pizza.id))}
-                            >
-                              -
-                            </button>
-                            {existingItem.quantity}
-                            <button
-                              className="ml-2 inline-block text-sm rounded-full bg-yellow-400 font-semibold uppercase tracking-wide text-stone-800 hover:bg-yellow-300 px-2.5 py-1 md:px-3.5 md:py-2"
-                              onClick={() => dispatch(addToCart(pizza))}
-                            >
-                              +
-                            </button>
-                            <button
-                              className="ml-2 inline-block text-sm rounded-full bg-yellow-400 font-semibold uppercase tracking-wide text-stone-800 hover:bg-yellow-300 px-2.5 py-1 md:px-3.5 md:py-2"
-                              onClick={() => dispatch(deleteFromCart(pizza.id))}
-                            >
-                              Delete
-                            </button>
-                          </div>
-                        ) : (
-                          <CustomButton
-                            onClick={() => dispatch(addToCart(pizza))}
-                          >
-                            Add To Cart
-                          </CustomButton>
-                        )
-                      ) : null}
-                    </div>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
-
-              
-        </main>
-        
+    <div className="flex flex-col h-screen">
+      {/* Sticky header */}
+      <div className="sticky top-0 z-50 bg-white shadow-md">
+        <Header />
       </div>
 
-      {TotalQuantity > 0 ? (
-        <div className=" bg-stone-800 px-4 py-4 text-sm uppercase text-stone-200 sm:px-6 md:text-base">
-          {TotalQuantity > 0 ? (
-            <p className="space-x-6 font-semibold text-stone-300 sm:space-x-6">
-              {" "}
-              <div className="flex justify-between item center">
-                {" "}
-                <div className="flex gap-3">
-                  {" "}
-                  {TotalQuantity} Pizzas €{TotalAmount}{" "}
-                </div>{" "}
-                <div>
-                  {" "}
-                  {/* <a href="/cart">Open cart →</a>{" "} */}
-                  <button
-                    onClick={() => {
-                    
-                      navigate("/cart"); 
-                    }}
-                  >
-                    Open cart →
-                  </button>
-                </div>{" "}
-              </div>
-            </p>
-          ) : (
-            ""
-          )}
+      {/* Scrollable pizza list */}
+      <main className="flex-grow overflow-y-auto bg-stone-100 text-stone-700  max-w-4xl mx-auto px-4">
+        <ul>
+          {MenuItem.map((pizza) => {
+            const existingItem = cart.find((item) => item.id === pizza.id);
+
+            return (
+              <li
+                key={pizza.id}
+                className="flex gap-4 py-2 border-b border-gray-300"
+              >
+                <img
+                  className={`h-24 ${pizza.soldOut ? "opacity-70 grayscale" : ""}`}
+                  src={pizza.imageUrl}
+                  alt={pizza.name}
+                />
+                <div className="flex grow flex-col pt-0.5">
+                  <p className="font-medium">{pizza.name}</p>
+                  <p className="text-sm capitalize italic text-stone-500">
+                    {pizza.ingredients.join(", ")}
+                  </p>
+
+                  <div className="mt-auto flex items-center justify-between">
+                    {pizza.soldOut ? (
+                      <p className="text-sm font-medium uppercase text-stone-500">
+                        Sold out
+                      </p>
+                    ) : (
+                      <p className="text-sm">€ {pizza.unitPrice}</p>
+                    )}
+
+                    {!pizza.soldOut ? (
+                      existingItem && visibleIds.includes(pizza.id) ? (
+                        <div>
+                          <button
+                            className="mr-2 inline-block text-sm rounded-full bg-yellow-400 font-semibold uppercase tracking-wide text-stone-800 hover:bg-yellow-300 px-2.5 py-1 md:px-3.5 md:py-2"
+                            onClick={() => dispatch(removeFromCart(pizza.id))}
+                          >
+                            -
+                          </button>
+                          {existingItem.quantity}
+                          <button
+                            className="ml-2 inline-block text-sm rounded-full bg-yellow-400 font-semibold uppercase tracking-wide text-stone-800 hover:bg-yellow-300 px-2.5 py-1 md:px-3.5 md:py-2"
+                            onClick={() => dispatch(addToCart(pizza))}
+                          >
+                            +
+                          </button>
+                          <button
+                            className="ml-2 inline-block text-sm rounded-full bg-yellow-400 font-semibold uppercase tracking-wide text-stone-800 hover:bg-yellow-300 px-2.5 py-1 md:px-3.5 md:py-2"
+                            onClick={() => dispatch(deleteFromCart(pizza.id))}
+                          >
+                            Delete
+                          </button>
+                        </div>
+                      ) : (
+                        <CustomButton onClick={() => dispatch(addToCart(pizza))}>
+                          Add To Cart
+                        </CustomButton>
+                      )
+                    ) : null}
+                  </div>
+                </div>
+              </li>
+            );
+          })}
+        </ul>
+      </main>
+
+      {/* Sticky bottom cart summary */}
+      {TotalQuantity > 0 && (
+        <div className="sticky bottom-0 z-50 bg-stone-800 px-4 py-4 text-sm uppercase text-stone-200 sm:px-6 md:text-base">
+          <div className="flex justify-between items-center">
+            <div className="flex gap-3">
+              {TotalQuantity} Pizzas €{TotalAmount}
+            </div>
+            <button
+              onClick={() => navigate("/cart")}
+              className=" "
+            >
+              Open cart →
+            </button>
+          </div>
         </div>
-      ) : (
-        ""
       )}
     </div>
   );

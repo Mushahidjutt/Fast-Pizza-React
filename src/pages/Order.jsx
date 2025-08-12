@@ -1,18 +1,47 @@
 import React from "react";
+import { useParams } from "react-router-dom";
 import Header from "../components/common/layout/Header";
 import { useDispatch, useSelector } from "react-redux";
-import {selectTotalAmount,selectTotalQuantity,
+import {
+  selectTotalAmount,
+  selectTotalQuantity,
+  togglePriority,
+  selectPriority,
+  selectCartItems,
+  setOrderNumber,
+  
 } from "../Redux/cartSlice";
 import CustomButton from "../components/common/button/CustomButton";
 import { useNavigate } from "react-router-dom";
 
 export default function Order() {
+  const dispatch = useDispatch();
   const totalquantity = useSelector(selectTotalQuantity);
+  const user = useSelector((state) => state.user?.currentUser);
+  
   const totalamount = useSelector(selectTotalAmount);
   const navigate = useNavigate();
+  const isPriority = useSelector(selectPriority);
+  const items = useSelector(selectCartItems);
+
+  
+  
+
+  console.log("items before reload: ", items);
+
+  const handlePlaceOrder = () => {
+    const orderId = Math.floor(100000 + Math.random() * 900000); // 6-digit
+    dispatch(setOrderNumber(orderId));
+    navigate(`/ordersumary/${orderId}`);
+  };
+
+
+
+  
+
 
   return (
-    <div className="relative min-h-screen pb-20"> 
+    <div className="relative min-h-screen pb-20">
       <Header />
 
       <div className="mx-auto max-w-3xl px-4 py-6">
@@ -25,7 +54,7 @@ export default function Order() {
             <input
               className="input grow border border-gray-300 rounded-2xl bg-white px-4 py-2 text-gray-700 
                focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-400 shadow-sm"
-              type="text"
+              type="text" value={user}
               required
             />
           </div>
@@ -54,11 +83,15 @@ export default function Order() {
             <input
               className="h-6 w-6 accent-yellow-400 focus:outline-none focus:ring focus:ring-yellow-400 focus:ring-offset-2"
               type="checkbox"
+              checked={isPriority}
+              onChange={(e) => dispatch(togglePriority(e.target.checked))}
             />
             <label>Want to give your order priority?</label>
           </div>
 
-          <CustomButton>order now from €{totalamount}</CustomButton>
+          <CustomButton onClick={handlePlaceOrder}>
+            order now from €{totalamount}
+          </CustomButton>
         </form>
       </div>
 
@@ -70,10 +103,13 @@ export default function Order() {
               {totalquantity} Pizzas €{totalamount}
             </div>
             <button
-              onClick={() => navigate("/cart")}
-              className="underline hover:text-yellow-400"
+              onClick={() => {
+                handleClick();
+                navigate("/cart");
+              }}
+              className=" "
             >
-              Open cart →
+              OPEN CART →
             </button>
           </div>
         </div>
