@@ -57,6 +57,8 @@ export default function Cart() {
                   </div>
 
                   <div>
+                    € {item.quantity * item.unitPrice}
+
                     <button
                       className="mr-2 ml-4 inline-block text-sm rounded-full bg-yellow-400 font-semibold uppercase tracking-wide text-stone-800 hover:bg-yellow-300 px-2.5 py-1 md:px-3.5 md:py-2"
                       onClick={() => dispatch(removeFromCart(item.id))}

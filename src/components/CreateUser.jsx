@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CustomInput from "./common/input/CustomInput";
 import CustomButton from "./common/button/CustomButton";
 import { setUser } from "../Redux/userSlice";
@@ -15,7 +15,7 @@ export default function CreateUser() {
 
 
 
-  console.log(user);
+  
   const dispatch = useDispatch();
 
   const handleClick = () => {

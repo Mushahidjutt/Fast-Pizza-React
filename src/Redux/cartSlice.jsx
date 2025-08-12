@@ -1,8 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// Helper function for minutes calculation
+function calcMinutesLeft(estimatedDelivery) {
+  const now = new Date();
+  const deliveryTime = new Date(estimatedDelivery);
+  const diffMs = deliveryTime - now;
+  return Math.max(Math.floor(diffMs / 60000), 0); // convert ms to minutes
+}
+
 const initialState = {
   items: [], // {id, name, unitPrice, quantity}
-  visibleIds: [], // jis item ke plus/minus buttons dikhane hain
+  visibleIds: [],
+  isPriority: false,
+  priorityCost: 6,
+  estimatedDelivery: null,
+  deliveryInMinutes: 0,
+  orderNumber: null, // 🆕 Order number store
 };
 
 const cartSlice = createSlice({
@@ -47,6 +60,30 @@ const cartSlice = createSlice({
     clearCart(state) {
       state.items = [];
       state.visibleIds = [];
+      state.isPriority = false;
+      state.estimatedDelivery = null;
+      state.deliveryInMinutes = 0;
+      state.orderNumber = null; // 🆕 Clear order number when cart clears
+    },
+
+    togglePriority(state) {
+      state.isPriority = !state.isPriority;
+    },
+
+    setEstimatedDelivery(state, action) {
+      state.estimatedDelivery = action.payload;
+      state.deliveryInMinutes = calcMinutesLeft(action.payload);
+    },
+
+    updateDeliveryTime(state) {
+      if (state.estimatedDelivery) {
+        state.deliveryInMinutes = calcMinutesLeft(state.estimatedDelivery);
+      }
+    },
+
+    // 🆕 New action to set order number
+    setOrderNumber(state, action) {
+      state.orderNumber = action.payload;
     },
   },
 });
@@ -56,18 +93,32 @@ export const {
   removeFromCart,
   deleteFromCart,
   clearCart,
+  togglePriority,
+  setEstimatedDelivery,
+  updateDeliveryTime,
+  setOrderNumber, // 🆕 export kiya
 } = cartSlice.actions;
 
-// selectors
+// Selectors
 export const selectCartItems = (state) => state.cart.items;
 export const selectVisibleIds = (state) => state.cart.visibleIds;
+export const selectPriority = (state) => state.cart.isPriority;
+export const selectPriorityCost = (state) =>
+  state.cart.isPriority ? state.cart.priorityCost : 0;
+
 export const selectTotalAmount = (state) =>
   state.cart.items.reduce(
     (total, item) => total + item.unitPrice * item.quantity,
     0
-  );
+  ) + (state.cart.isPriority ? state.cart.priorityCost : 0);
 
-  export const selectTotalQuantity = (state) =>
+export const selectTotalQuantity = (state) =>
   state.cart.items.reduce((total, item) => total + item.quantity, 0);
+
+export const selectEstimatedDelivery = (state) => state.cart.estimatedDelivery;
+export const selectDeliveryInMinutes = (state) => state.cart.deliveryInMinutes;
+
+// 🆕 Selector for order number
+export const selectOrderNumber = (state) => state.cart.orderNumber;
 
 export default cartSlice.reducer;
