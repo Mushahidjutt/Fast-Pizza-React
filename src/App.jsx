@@ -7,7 +7,7 @@ import Header from "./components/common/layout/Header";
 import { Routes, Route } from "react-router-dom";
 import MenuPage from "./pages/Menu/MenuPage";
 import Cart from "./pages/Cart";
-import Order from "./pages/order";
+import Order from "./pages/Order";           
 import OrderSumary from "./pages/OrderSumary";
 
 function App() {
@@ -19,12 +19,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/order" element={<Order />} />
         <Route path="/ordersumary/:orderId?" element={<OrderSumary />} />
-
-
-
-
       </Routes>
-      
     </div>
   );
 }
