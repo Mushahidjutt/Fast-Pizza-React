@@ -36,7 +36,7 @@ function OrderSummary() {
   const filteredOrders = orders.filter(
     (order, index, self) =>
       order.id.toString().toLowerCase().includes(searchOrderId.toLowerCase()) &&
-      index === self.findIndex(o => o.id === order.id)
+      index === self.findIndex(o => o.id === order.id) 
   );
 
   const [secondsLeft, setSecondsLeft] = useState(0);
