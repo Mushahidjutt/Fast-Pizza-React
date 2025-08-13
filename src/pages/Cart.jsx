@@ -50,7 +50,9 @@ export default function Cart() {
             {items.length === 0 && <p>Your Cart is Empty</p>}
 
             {items.map((item) => (
-              <div key={item.id} className="border-b border-gray-300">
+              <div key={item.id} className="
+              
+              -b border-gray-300">
                 <div className="flex justify-between mt-4 mb-4">
                   <div>
                     {item.quantity} x {item.name}
@@ -100,7 +102,7 @@ export default function Cart() {
         )}
       </main>
 
-      {/* Bottom fixed bar */}
+      
       {totalQuantity > 0 && (
         <div className="fixed bottom-0 w-full bg-stone-800 px-4 py-4 text-sm uppercase text-stone-200 sm:px-6 md:text-base">
           <div className="flex justify-between items-center">

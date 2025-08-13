@@ -1,41 +1,46 @@
 import React from "react";
 import CustomInput from "../input/CustomInput";
-import { useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
+import SearchOrderBar from "../SearchOrderBar";
+
 
 export default function Header() {
-  const user = useSelector((state) => state.user?.currentUser);
-
+    const user = useSelector((state) => state.user?.currentUser);
+     
+  
   return (
     <div>
-      {user ? (
-        <div className="sticky top-0 flex items-center justify-between border-b border-stone-200 bg-yellow-400 px-4 py-2.5 uppercase sm:px-6 z-50">
-          <a className="tracking-widest" href="/">
-            Fast React Pizza Co.
-          </a>
 
-          <CustomInput
-            id="email"
-            name="email"
-            placeholder="Search order #"
-            variant="search"
-          />
+      {user ? (<div className=" sticky flex items-center justify-between border-b border-stone-200 bg-yellow-400 px-4 py-2.5 uppercase sm:px-6">
+        <a className="tracking-widest" href="/">
+          Fast React Pizza Co.
+        </a>
+
+        
+      
+
+          <SearchOrderBar/>
 
           {user}
-        </div>
-      ) : (
-        <div className="sticky top-0 flex items-center justify-between border-b border-stone-200 bg-yellow-400 px-4 py-2.5 uppercase sm:px-6 z-50">
-          <a className="tracking-widest" href="/">
-            Fast React Pizza Co.
-          </a>
+        
+      </div>): (<div className=" sticky flex items-center justify-between border-b border-stone-200 bg-yellow-400 px-4 py-2.5 uppercase sm:px-6">
+        <a className="tracking-widest" href="/">
+          Fast React Pizza Co.
+        </a>
 
+        
           <CustomInput
             id="email"
             name="email"
-            placeholder="Search order #"
+            placeholder="Search  order  #"
             variant="search"
           />
-        </div>
-      )}
+        
+      </div>)}
+
+      
+      
+      
     </div>
   );
 }
