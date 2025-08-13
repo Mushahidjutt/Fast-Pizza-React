@@ -21,7 +21,7 @@ const MenuItem = [
     unitPrice: 79,
     ingredients: ["Tomato Sauce", "Mozzarella", "Basil"],
     soldOut: false,
-    imageUrl: "public/photos/pizza-1.jpg",
+    imageUrl: "/photos/pizza-1.jpg",
   },
   {
     id: 2,
@@ -29,7 +29,7 @@ const MenuItem = [
     unitPrice: 99,
     ingredients: ["Tomato Sauce", "Mozzarella", "Pepperoni"],
     soldOut: true,
-    imageUrl: "public/photos/pizza-2.jpg",
+    imageUrl: "/photos/pizza-2.jpg",
   },
   {
     id: 3,
@@ -37,7 +37,7 @@ const MenuItem = [
     unitPrice: 10,
     ingredients: ["BBQ Sauce", "Chicken", "Onions", "Mozzarella"],
     soldOut: false,
-    imageUrl: "public/photos/pizza-3.jpg",
+    imageUrl: "/photos/pizza-3.jpg",
   },
   {
     id: 4,
@@ -45,7 +45,7 @@ const MenuItem = [
     unitPrice: 84,
     ingredients: ["Tomato Sauce", "Mozzarella", "Peppers", "Olives", "Onions"],
     soldOut: false,
-    imageUrl: "public/photos/pizza-4.jpg",
+    imageUrl: "/photos/pizza-4.jpg",
   },
   {
     id: 5,
@@ -53,7 +53,7 @@ const MenuItem = [
     unitPrice: 67,
     ingredients: ["Mozzarella", "Cheddar", "Parmesan", "Blue Cheese"],
     soldOut: false,
-    imageUrl: "public/photos/pizza-5.jpg",
+    imageUrl: "/photos/pizza-5.jpg",
   },
   {
     id: 6,
@@ -61,7 +61,7 @@ const MenuItem = [
     unitPrice: 98,
     ingredients: ["Tomato Sauce", "Mozzarella", "Ham", "Pineapple"],
     soldOut: true,
-    imageUrl: "public/photos/pizza-6.jpg",
+    imageUrl: "/photos/pizza-6.jpg",
   },
 ];
 
