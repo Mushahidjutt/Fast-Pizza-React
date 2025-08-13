@@ -7,7 +7,7 @@ import Header from "./components/common/layout/Header";
 import { Routes, Route } from "react-router-dom";
 import MenuPage from "./pages/Menu/MenuPage";
 import Cart from "./pages/Cart";
-import Order from "./pages/Order";           
+import Order from "./pages/order";           
 import OrderSumary from "./pages/OrderSumary";
 
 function App() {
