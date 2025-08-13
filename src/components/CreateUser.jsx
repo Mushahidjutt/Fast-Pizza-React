@@ -23,7 +23,7 @@ export default function CreateUser() {
     setisLoading(true);
     setTimeout(() => {
       setisLoading(false);
-    //   <Navigate to ='/>
+    
       navigate('/menupage')
     }, 1500);
   };

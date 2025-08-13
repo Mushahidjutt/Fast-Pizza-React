@@ -11,7 +11,10 @@ import {
   selectCartItems,
   selectEstimatedDelivery,
   updateDeliveryTime,
-  selectOrderNumber
+  selectOrderNumber,
+  selectOrders,
+  selectSearchOrderId,
+  addOrder
 } from "../Redux/cartSlice";
 import Header from "../components/common/layout/Header";
 import CustomButton from "../components/common/button/CustomButton";
@@ -19,23 +22,43 @@ import CustomButton from "../components/common/button/CustomButton";
 function OrderSummary() {
   const dispatch = useDispatch();
   const { orderId } = useParams();
+
   const orderNumber = useSelector(selectOrderNumber);
-
-  console.log("order id is : ",orderId);
-  
-
   const deliveryInMinutes = useSelector(selectDeliveryInMinutes);
   const estimatedTime = useSelector(selectEstimatedDelivery);
   const isPriority = useSelector(selectPriority);
   const priorityCost = useSelector(selectPriorityCost);
   const totalAmount = useSelector(selectTotalAmount);
   const items = useSelector(selectCartItems);
+  const orders = useSelector(selectOrders);
+  const searchOrderId = useSelector(selectSearchOrderId);
+
+  const filteredOrders = orders.filter(
+    (order, index, self) =>
+      order.id.toString().toLowerCase().includes(searchOrderId.toLowerCase()) &&
+      index === self.findIndex(o => o.id === order.id)
+  );
 
   const [secondsLeft, setSecondsLeft] = useState(0);
-  
-  
 
-  // ✅ Set delivery time
+  useEffect(() => {
+    if (items.length > 0 && (orderNumber || orderId)) {
+      const exists = orders.some(o => o.id.toString() === (orderNumber || orderId).toString());
+      if (!exists) {
+        dispatch(
+          addOrder({
+            id: (orderNumber || orderId).toString(),
+            items,
+            totalAmount,
+            priority: isPriority,
+            estimatedDelivery: estimatedTime
+          })
+        );
+      }
+    }
+    
+  }, [dispatch, items, orderNumber, orderId, totalAmount, isPriority, estimatedTime]);
+
   useEffect(() => {
     if (items.length > 0) {
       const oneHourLater = new Date(Date.now() + 60 * 60 * 1000).toISOString();
@@ -43,10 +66,8 @@ function OrderSummary() {
     }
   }, [dispatch, items.length]);
 
-  // ✅ Countdown
   useEffect(() => {
     if (items.length === 0) return;
-
     const interval = setInterval(() => {
       dispatch(updateDeliveryTime());
       if (estimatedTime) {
@@ -56,7 +77,6 @@ function OrderSummary() {
         setSecondsLeft(diffMs > 0 ? Math.floor((diffMs % (1000 * 60)) / 1000) : 0);
       }
     }, 1000);
-
     return () => clearInterval(interval);
   }, [dispatch, estimatedTime, items.length]);
 
@@ -81,19 +101,36 @@ function OrderSummary() {
 
   return (
     <div>
-      <Header />
+      <div className="sticky top-0 z-50 bg-white">
+        <Header />
+      </div>
       <main className="mx-auto max-w-3xl">
         <div className="space-y-8 px-4 py-6">
+          {searchOrderId && (
+            <div className="bg-gray-100 p-4 rounded-lg">
+              <h3 className="font-bold mb-2">Search Results:</h3>
+              {filteredOrders.length > 0 ? (
+                filteredOrders.map(order => (
+                  <div key={order.id} className="border-b py-2">
+                    <p><strong>Order ID:</strong> {order.id}</p>
+                    <p><strong>Total:</strong> ${order.totalAmount}</p>
+                  </div>
+                ))
+              ) : (
+                <p className="text-gray-500">No matching orders found.</p>
+              )}
+            </div>
+          )}
+
           {items.length === 0 ? (
             <p className="text-center text-lg font-semibold text-stone-500">
               Your cart is empty
             </p>
           ) : (
             <>
-              {/* Order Status */}
               <div className="flex flex-wrap items-center justify-between gap-2">
                 <h2 className="text-xl font-semibold">
-                  Order  # {orderNumber || orderId} Status
+                  Order #{orderNumber || orderId} Status
                 </h2>
                 <div className="space-x-2">
                   {isPriority && (
@@ -107,34 +144,35 @@ function OrderSummary() {
                 </div>
               </div>
 
-              {/* Delivery Estimate */}
               <div className="flex flex-wrap items-center justify-between gap-2 bg-stone-200 px-6 py-5">
                 <p className="font-medium">
-                  { deliveryInMinutes <= 0 && secondsLeft <=0
+                  {deliveryInMinutes <= 0 && secondsLeft <= 0
                     ? "Order should have arrived"
-                    : `Only ${deliveryInMinutes} min ${secondsLeft}s left 😃` }
+                    : `Only ${deliveryInMinutes} min ${secondsLeft}s left 😃`}
                 </p>
                 <p className="text-xs text-stone-500">
                   (Estimated delivery: {formattedDeliveryTime})
                 </p>
               </div>
 
-              {/* Order Items */}
-              <ul className="dive-stone-200 divide-y border-b border-t  border-gray-300 divide-gray-300 mt-2 mb-3">
+              <ul className="divide-y border-b border-t border-gray-300 mt-2 mb-3">
                 {items.map((item) => (
                   <div key={item.id} className="flex justify-between mt-2 mb-2 py-2">
-                    <div className=" ">
+                    <div>
                       <strong>{item.quantity} x </strong> {item.name}
-                      {item.ingredients  && ( 
-                        <span className="mt-2"> <br /> {item.ingredients.join(", ")}</span>
+                      {item.ingredients && (
+                        <span className="mt-2">
+                          <br /> {item.ingredients.join(", ")}
+                        </span>
                       )}
                     </div>
-                    <div> <strong>${item.unitPrice * item.quantity}.00</strong></div>
+                    <div>
+                      <strong>${item.unitPrice * item.quantity}.00</strong>
+                    </div>
                   </div>
                 ))}
               </ul>
 
-              {/* Price Details */}
               <div className="space-y-2 bg-stone-200 px-6 py-5">
                 <p className="text-sm font-medium text-stone-600">
                   Price pizza: ${totalAmount}
