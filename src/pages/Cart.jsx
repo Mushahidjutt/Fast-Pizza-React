@@ -91,12 +91,7 @@ export default function Cart() {
                 Order Pizza
               </CustomButton>
 
-              <button
-                className="ml-4 inline-block text-sm rounded-full border-2 border-stone-300 font-semibold uppercase tracking-wide text-stone-400 transition-colors duration-300 hover:bg-stone-300 hover:text-stone-800 px-4 py-2.5 md:px-6 md:py-3.5"
-                onClick={handleDeleteAll}
-              >
-                Clear Cart
-              </button>
+             
             </div>
           </div>
         )}
