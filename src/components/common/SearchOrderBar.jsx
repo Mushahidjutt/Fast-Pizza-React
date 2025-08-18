@@ -1,6 +1,10 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setSearchOrderId, selectSearchOrderId, selectAllOrders } from "../../Redux/cartSlice";
+import {
+  setSearchOrderId,
+  selectSearchOrderId,
+  selectAllOrders,
+} from "../../Redux/cartSlice";
 import CustomInput from "./input/CustomInput";
 
 export default function SearchOrderBar() {
@@ -8,12 +12,9 @@ export default function SearchOrderBar() {
   const searchValue = useSelector(selectSearchOrderId);
   const orders = useSelector(selectAllOrders);
 
-  
-  const filteredOrders = orders.filter(order =>
+  const filteredOrders = orders.filter((order) =>
     order.id.toLowerCase().includes(searchValue.trim().toLowerCase())
   );
-
-  console.log("All Orders:", orders);
 
   return (
     <div>
@@ -28,10 +29,8 @@ export default function SearchOrderBar() {
       {searchValue.trim() !== "" && (
         <ul className="mt-2">
           {filteredOrders.length > 0 ? (
-            filteredOrders.map(order => (
-              <li key={order.id} className="border-b py-1">
-                {order.id}
-              </li>
+            filteredOrders.map((order) => (
+              <li key={order.id} className=" "></li>
             ))
           ) : (
             <li className="text-gray-500">No orders found</li>

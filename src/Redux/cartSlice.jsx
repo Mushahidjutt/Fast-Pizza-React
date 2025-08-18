@@ -11,7 +11,7 @@ const initialState = {
   items: [],
   visibleIds: [],
   isPriority: false,
-  priorityCost: 6,
+  priorityCost: 20,
   estimatedDelivery: null,
   deliveryInMinutes: 0,
   orderNumber: null,
@@ -35,7 +35,6 @@ const cartSlice = createSlice({
         state.visibleIds.push(product.id);
       }
     },
-
     removeFromCart(state, action) {
       const id = action.payload;
       const existing = state.items.find((item) => item.id === id);
@@ -47,13 +46,11 @@ const cartSlice = createSlice({
         }
       }
     },
-
     deleteFromCart(state, action) {
       const id = action.payload;
       state.items = state.items.filter((item) => item.id !== id);
       state.visibleIds = state.visibleIds.filter((vid) => vid !== id);
     },
-
     clearCart(state) {
       state.items = [];
       state.visibleIds = [];
@@ -63,34 +60,27 @@ const cartSlice = createSlice({
       state.orderNumber = null;
       state.searchOrderId = "";
     },
-
     togglePriority(state) {
       state.isPriority = !state.isPriority;
     },
-
     setEstimatedDelivery(state, action) {
       state.estimatedDelivery = action.payload;
       state.deliveryInMinutes = calcMinutesLeft(action.payload);
     },
-
     updateDeliveryTime(state) {
       if (state.estimatedDelivery) {
         state.deliveryInMinutes = calcMinutesLeft(state.estimatedDelivery);
       }
     },
-
     setOrderNumber(state, action) {
       state.orderNumber = action.payload;
     },
-
     setSearchOrderId(state, action) {
       state.searchOrderId = action.payload;
     },
-
     clearSearchOrderId(state) {
       state.searchOrderId = "";
     },
-
     addOrder(state, action) {
       const newOrder = action.payload;
       const exists = state.orders.some((order) => order.id === newOrder.id);
@@ -98,29 +88,38 @@ const cartSlice = createSlice({
         state.orders.push(newOrder);
       }
     },
-
+    updateOrder(state, action) {
+      const orderId = action.payload;
+      const order = state.orders.find((o) => o.id === orderId);
+      if (order && !order.isPriority) {
+        order.isPriority = true;
+        order.priorityCost = 20;
+        if (order.estimatedDelivery) {
+          const deliveryTime = new Date(order.estimatedDelivery);
+          deliveryTime.setMinutes(deliveryTime.getMinutes() - 20);
+          order.estimatedDelivery = deliveryTime.toISOString();
+        }
+      }
+    },
     placeOrder(state) {
       if (state.items.length === 0) return;
-
+      const baseSubtotal = state.items.reduce(
+        (total, item) => total + item.unitPrice * item.quantity,
+        0
+      );
       const newOrder = {
         id: state.orderNumber || Date.now().toString(),
         items: state.items,
-        totalAmount:
-          state.items.reduce(
-            (total, item) => total + item.unitPrice * item.quantity,
-            0
-          ) + (state.isPriority ? state.priorityCost : 0),
+        totalAmount: baseSubtotal,
         isPriority: state.isPriority,
         priorityCost: state.isPriority ? state.priorityCost : 0,
         estimatedDelivery: state.estimatedDelivery,
         placedAt: new Date().toISOString(),
       };
-
       const exists = state.orders.some((order) => order.id === newOrder.id);
       if (!exists) {
         state.orders.push(newOrder);
       }
-
       state.items = [];
       state.visibleIds = [];
       state.isPriority = false;
@@ -144,6 +143,7 @@ export const {
   clearSearchOrderId,
   placeOrder,
   addOrder,
+  updateOrder,
 } = cartSlice.actions;
 
 export const selectCartItems = (state) => state.cart.items;
