@@ -27,14 +27,8 @@ export default function Header() {
         <a className="tracking-widest" href="/">
           Fast React Pizza Co.
         </a>
-
-        
-          <CustomInput
-            id="email"
-            name="email"
-            placeholder="Search  order  #"
-            variant="search"
-          />
+      
+          <SearchOrderBar/>
         
       </div>)}
 

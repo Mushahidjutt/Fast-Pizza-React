@@ -77,9 +77,9 @@ export default function MenuPage() {
   return (
     <div className="flex flex-col h-screen">
       
-      <div className="">
-        <Header />
-      </div>
+       <div className="sticky top-0 z-50 bg-white">
+                <Header />
+              </div>
 
       
       <div className="flex items-center justify-center">

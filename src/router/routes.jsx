@@ -4,9 +4,6 @@ import MainPage from "../pages/MainPage";
 import Cart from "../pages/Cart";
 import Order from "../pages/order";
 
-
-
-
 export const routes = createBrowserRouter([
   
   {
@@ -29,11 +26,6 @@ export const routes = createBrowserRouter([
     path: "/order",
     element: <Order/>,
   },
-  
-
-
-  
-
   
   {
     path: "/home",

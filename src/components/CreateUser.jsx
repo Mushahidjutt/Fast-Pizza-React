@@ -12,9 +12,6 @@ export default function CreateUser() {
   const [fullName, setFullName] = useState("");
   const [isLoading, setisLoading] = useState(false);
   const navigate = useNavigate();
-
-
-
   
   const dispatch = useDispatch();
 

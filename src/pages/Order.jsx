@@ -43,6 +43,9 @@ export default function Order() {
       if (isPriority) {
         deliveryDate.setMinutes(deliveryDate.getMinutes() - 20);
       }
+
+    
+      
       dispatch(
         addOrder({
           id: orderId,
@@ -51,7 +54,11 @@ export default function Order() {
           isPriority,
           priorityCost: isPriority ? 20 : 0,
           estimatedDelivery: deliveryDate.toISOString(),
-        })
+        }),
+        
+        
+
+        
       );
       dispatch(setOrderNumber(orderId));
       navigate(`/ordersumary/${orderId}`);

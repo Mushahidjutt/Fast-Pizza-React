@@ -17,7 +17,7 @@
   ...rest
 }) => {
   
-  // ✅ FIXED SECTION
+ 
   let baseClass = "px-3 py-[7px] border rounded focus:outline-none w-full bg-light_gray no-spinners";
   
   if (variant === 'search') {
