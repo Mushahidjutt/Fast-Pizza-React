@@ -11,7 +11,6 @@ import {
   selectCartItems,
   setOrderNumber,
   addOrder,
-  selectOrderNumber,
 } from "../Redux/cartSlice";
 import CustomButton from "../components/common/button/CustomButton";
 
@@ -41,7 +40,7 @@ export default function Order() {
       if (isPriority) {
         deliveryDate.setMinutes(deliveryDate.getMinutes() - 20);
       }
-        
+
       dispatch(
         addOrder({
           id: orderId,
