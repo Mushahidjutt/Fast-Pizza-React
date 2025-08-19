@@ -1,4 +1,3 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -28,7 +27,6 @@ export default function Order() {
   const totalamount = useSelector(selectTotalAmount);
   const isPriority = useSelector(selectPriority);
   const items = useSelector(selectCartItems);
-  const orderNumber = useSelector(selectOrderNumber);
   const user = useSelector((state) => state.user?.currentUser);
   const navigate = useNavigate();
 
@@ -43,9 +41,7 @@ export default function Order() {
       if (isPriority) {
         deliveryDate.setMinutes(deliveryDate.getMinutes() - 20);
       }
-
-    
-      
+        
       dispatch(
         addOrder({
           id: orderId,
@@ -54,12 +50,8 @@ export default function Order() {
           isPriority,
           priorityCost: isPriority ? 20 : 0,
           estimatedDelivery: deliveryDate.toISOString(),
-        }),
-        
-        
+        }), );
 
-        
-      );
       dispatch(setOrderNumber(orderId));
       navigate(`/ordersumary/${orderId}`);
     },

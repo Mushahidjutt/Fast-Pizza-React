@@ -1,4 +1,3 @@
-// src/redux/slices/cartSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -6,8 +5,6 @@ const initialState = {
   islogged : true,
     
 };
-
-
 
 const userSlice = createSlice({
   name: 'user',
@@ -20,8 +17,6 @@ const userSlice = createSlice({
     
   },
 });
-
-
 
 export const { setUser } = userSlice.actions;
 export default userSlice.reducer;

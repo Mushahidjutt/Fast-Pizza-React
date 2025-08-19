@@ -1,4 +1,3 @@
-import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/common/layout/Header";
 import CustomButton from "../../components/common/button/CustomButton";

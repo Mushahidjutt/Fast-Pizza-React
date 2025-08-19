@@ -52,7 +52,7 @@ export default function Cart() {
             {items.map((item) => (
               <div key={item.id} className="
               
-              -b border-gray-300">
+               border-gray-300">
                 <div className="flex justify-between mt-4 mb-4">
                   <div>
                     {item.quantity} x {item.name}
