@@ -88,19 +88,7 @@ const cartSlice = createSlice({
         state.orders.push(newOrder);
       }
     },
-    updateOrder(state, action) {
-      const orderId = action.payload;
-      const order = state.orders.find((o) => o.id === orderId);
-      if (order && !order.isPriority) {
-        order.isPriority = true;
-        order.priorityCost = 20;
-        if (order.estimatedDelivery) {
-          const deliveryTime = new Date(order.estimatedDelivery);
-          deliveryTime.setMinutes(deliveryTime.getMinutes() - 20);
-          order.estimatedDelivery = deliveryTime.toISOString();
-        }
-      }
-    },
+    
     placeOrder(state) {
       if (state.items.length === 0) return;
       const baseSubtotal = state.items.reduce(
