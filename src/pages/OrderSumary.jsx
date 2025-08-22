@@ -40,20 +40,7 @@ function OrderSummary() {
     if (order) dispatch(updateOrder(order.id));
   };
 
-  if (!order) {
-    return (
-      <div>
-        <div className="sticky top-0 z-50 bg-white">
-          <Header />
-        </div>
-        <main className="mx-auto max-w-3xl">
-          <div className="px-4 py-6">
-            <p className="text-center text-lg font-semibold text-stone-500">No order found</p>
-          </div>
-        </main>
-      </div>
-    );
-  }
+
 
   const baseSubtotal = order.items.reduce((t, i) => t + i.unitPrice * i.quantity, 0);
   const priorityFee = order.isPriority ? order.priorityCost || 0 : 0;
