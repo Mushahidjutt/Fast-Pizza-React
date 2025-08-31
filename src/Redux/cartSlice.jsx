@@ -1,168 +1,56 @@
-import { createSlice } from "@reduxjs/toolkit";
+import React, { useState } from 'react';
 
-function calcMinutesLeft(estimatedDelivery) {
-  const now = new Date();
-  const deliveryTime = new Date(estimatedDelivery);
-  const diffMs = deliveryTime - now;
-  return Math.max(Math.floor(diffMs / 60000), 0);
-}
+const ProductForm = () => {
+  // Step 1: Initial list with ids
+  const [list, setList] = useState([
+    { id: 1, name: 'Product 1', price: 100 },
+    { id: 2, name: 'Product 2', price: 200 },
+    { id: 3, name: 'Product 3', price: 300 },
+  ]);
 
-const initialState = {
-  items: [],
-  visibleIds: [],
-  isPriority: false,
-  priorityCost: 20,
-  estimatedDelivery: null,
-  deliveryInMinutes: 0,
-  orderNumber: null,
-  searchOrderId: "",
-  orders: [],
+  // Step 2: Handle delete function
+  const handleDelete = (id) => {
+    const updatedList = list.filter((product) => product.id !== id);
+    setList(updatedList);
+    console.log(updatedList, "list updated after delete");
+  };
+
+  // Step 3: Handle update function
+  const handleUpdate = (id, newName, newPrice) => {
+    const updatedList = list.map((product) => {
+      if (product.id === id) {
+        return { ...product, name: newName, price: newPrice }; // Update the item
+      }
+      return product; // Keep other items unchanged
+    });
+    setList(updatedList);
+    console.log(updatedList, "list updated after update");
+  };
+
+  return (
+    <div>
+      <h2>Product List</h2>
+
+      {/* Update product button example */}
+      <button onClick={() => handleUpdate(1, 'Updated Product 1', 150)}>
+        Update Product 1
+      </button>
+
+      <ul>
+        {list.map((product) => (
+          <li key={product.id}>
+            {product.name} - ${product.price}
+            <button onClick={() => handleDelete(product.id)}>Delete</button>
+            <button
+              onClick={() => handleUpdate(product.id, 'Updated ' + product.name, product.price + 10)}
+            >
+              Update
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
-const cartSlice = createSlice({
-  name: "cart",
-  initialState,
-  reducers: {
-    addToCart(state, action) {
-      const product = action.payload;
-      const existing = state.items.find((item) => item.id === product.id);
-      if (existing) {
-        existing.quantity += 1;
-      } else {
-        state.items.push({ ...product, quantity: 1 });
-      }
-      if (!state.visibleIds.includes(product.id)) {
-        state.visibleIds.push(product.id);
-      }
-    },
-    removeFromCart(state, action) {
-      const id = action.payload;
-      const existing = state.items.find((item) => item.id === id);
-      if (existing) {
-        existing.quantity -= 1;
-        if (existing.quantity <= 0) {
-          state.items = state.items.filter((item) => item.id !== id);
-          state.visibleIds = state.visibleIds.filter((vid) => vid !== id);
-        }
-      }
-    },
-    deleteFromCart(state, action) {
-      const id = action.payload;
-      state.items = state.items.filter((item) => item.id !== id);
-      state.visibleIds = state.visibleIds.filter((vid) => vid !== id);
-    },
-    clearCart(state) {
-      state.items = [];
-      state.visibleIds = [];
-      state.isPriority = false;
-      state.estimatedDelivery = null;
-      state.deliveryInMinutes = 0;
-      state.orderNumber = null;
-      state.searchOrderId = "";
-    },
-    togglePriority(state) {
-      state.isPriority = !state.isPriority;
-    },
-    setEstimatedDelivery(state, action) {
-      state.estimatedDelivery = action.payload;
-      state.deliveryInMinutes = calcMinutesLeft(action.payload);
-    },
-    updateDeliveryTime(state) {
-      if (state.estimatedDelivery) {
-        state.deliveryInMinutes = calcMinutesLeft(state.estimatedDelivery);
-      }
-    },
-    setOrderNumber(state, action) {
-      state.orderNumber = action.payload;
-    },
-    setSearchOrderId(state, action) {
-      state.searchOrderId = action.payload;
-    },
-    clearSearchOrderId(state) {
-      state.searchOrderId = "";
-    },
-    addOrder(state, action) {
-      const newOrder = action.payload;
-      const exists = state.orders.some((order) => order.id === newOrder.id);
-      if (!exists) {
-        state.orders.push(newOrder);
-      }
-    },
-    updateOrder(state, action) {
-      const orderId = action.payload;
-      const order = state.orders.find((o) => o.id === orderId);
-      if (order && !order.isPriority) {
-        order.isPriority = true;
-        order.priorityCost = 20;
-        if (order.estimatedDelivery) {
-          const deliveryTime = new Date(order.estimatedDelivery);
-          deliveryTime.setMinutes(deliveryTime.getMinutes() - 20);
-          order.estimatedDelivery = deliveryTime.toISOString();
-        }
-      }
-    },
-    placeOrder(state) {
-      if (state.items.length === 0) return;
-      const baseSubtotal = state.items.reduce(
-        (total, item) => total + item.unitPrice * item.quantity,
-        0
-      );
-      const newOrder = {
-        id: state.orderNumber || Date.now().toString(),
-        items: state.items,
-        totalAmount: baseSubtotal,
-        isPriority: state.isPriority,
-        priorityCost: state.isPriority ? state.priorityCost : 0,
-        estimatedDelivery: state.estimatedDelivery,
-        placedAt: new Date().toISOString(),
-      };
-      const exists = state.orders.some((order) => order.id === newOrder.id);
-      if (!exists) {
-        state.orders.push(newOrder);
-      }
-      state.items = [];
-      state.visibleIds = [];
-      state.isPriority = false;
-      state.estimatedDelivery = null;
-      state.deliveryInMinutes = 0;
-      state.orderNumber = null;
-    },
-  },
-});
-
-export const {
-  addToCart,
-  removeFromCart,
-  deleteFromCart,
-  clearCart,
-  togglePriority,
-  setEstimatedDelivery,
-  updateDeliveryTime,
-  setOrderNumber,
-  setSearchOrderId,
-  clearSearchOrderId,
-  placeOrder,
-  addOrder,
-  updateOrder,
-} = cartSlice.actions;
-
-export const selectCartItems = (state) => state.cart.items;
-export const selectVisibleIds = (state) => state.cart.visibleIds;
-export const selectPriority = (state) => state.cart.isPriority;
-export const selectPriorityCost = (state) =>
-  state.cart.isPriority ? state.cart.priorityCost : 0;
-export const selectTotalAmount = (state) =>
-  state.cart.items.reduce(
-    (total, item) => total + item.unitPrice * item.quantity,
-    0
-  ) + (state.cart.isPriority ? state.cart.priorityCost : 0);
-export const selectTotalQuantity = (state) =>
-  state.cart.items.reduce((total, item) => total + item.quantity, 0);
-export const selectEstimatedDelivery = (state) => state.cart.estimatedDelivery;
-export const selectDeliveryInMinutes = (state) => state.cart.deliveryInMinutes;
-export const selectOrderNumber = (state) => state.cart.orderNumber;
-export const selectSearchOrderId = (state) => state.cart.searchOrderId;
-export const selectAllOrders = (state) => state.cart.orders;
-export const selectOrders = selectAllOrders;
-
-export default cartSlice.reducer;
+export default ProductForm;

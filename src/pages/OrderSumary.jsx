@@ -47,9 +47,7 @@ function OrderSummary() {
           <Header />
         </div>
         <main className="mx-auto max-w-3xl">
-          <div className="px-4 py-6">
-            <p className="text-center text-lg font-semibold text-stone-500">No order found</p>
-          </div>
+          
         </main>
       </div>
     );
