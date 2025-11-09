@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Header from "../../components/common/layout/Header";
 import CustomButton from "../../components/common/button/CustomButton";
 import { useNavigate } from "react-router-dom";
+// import pic1 from "../../assets/photos/pizza-1.jpg"
 
 import {
   addToCart,
